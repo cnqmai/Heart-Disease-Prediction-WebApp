@@ -1,94 +1,93 @@
-import os
-import pandas as pd
 import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+df = pd.read_csv("heart.csv")
+# print(df.head())
+
+#Kiểm tra dữ liệu thiếu
+for i in df:
+    if df[i].isnull().sum()>0:
+        print(f'{i} has:  {df[i].isnull().sum()} missing values')
+    else:
+        print(f'{i} has:  {df[i].isnull().sum()} missing values')
+
+print(df.describe())
+print(df.info())
+print(df.shape)
+
+
+# Vẽ biểu đồ phân phối tuổi theo tình trạng bệnh tim
+plt.figure(figsize=(10,6))
+sns.histplot(
+    data=df,
+    x='age',
+    hue='target',
+    bins=15,
+    kde=True
+)
+
+plt.title('Phân phối tuổi theo tình trạng bệnh tim')
+plt.xlabel('Age')
+plt.ylabel('Count')
+plt.show()
+
+# Vẽ biểu đồ phân phối giới tính theo tình trạng bệnh tim
+plt.figure(figsize=(6,4))
+
+sns.countplot(
+    data=df,
+    x='sex',
+    hue='target'
+)
+
+plt.title('Giới tính và tỷ lệ mắc bệnh tim')
+plt.xlabel('Sex (0=Nữ,1=Nam)')
+plt.ylabel('Count')
+
+plt.show()
+
+# Vẽ biểu đồ phân phối mức độ cholesterol theo tình trạng bệnh tim
+plt.figure(figsize=(12,8))
+
+sns.heatmap(
+    df.corr(),
+    annot=True,
+    cmap='coolwarm'
+)
+
+plt.title('Correlation Matrix')
+plt.show()
+
+#Báo cáo thống kê về tuổi trung bình của bệnh nhân mắc bệnh tim và không mắc bệnh tim
+mean_age_with_heart_disease = df[df['target'] == 1]['age'].mean()
+mean_age_without_heart_disease = df[df['target'] == 0]['age'].mean()
+print(f'Tuổi trung bình của bệnh nhân mắc bệnh tim: {mean_age_with_heart_disease:.2f} tuổi')
+print(f'Tuổi trung bình của bệnh nhân không mắc bệnh tim: {mean_age_without_heart_disease:.2f} tuổi')
+
+#Báo cáo thống kê về tỷ lệ mắc bệnh tim theo giới tính
+heart_disease_by_sex = df.groupby('sex')['target'].mean()
+print(f'Tỷ lệ mắc bệnh tim theo giới tính:')
+for sex, rate in heart_disease_by_sex.items():
+    print(f'  Giới tính {sex}: {rate:.2%}')
+
+#Báo cáo thống kê về mức độ cholesterol trung bình của bệnh nhân mắc bệnh tim và không mắc bệnh tim
+mean_chol_with_heart_disease = df[df['target'] == 1]['chol'].mean()
+mean_chol_without_heart_disease = df[df['target'] == 0]['chol'].mean()
+print(f'Mức độ cholesterol trung bình của bệnh nhân mắc bệnh tim: {mean_chol_with_heart_disease:.2f} mg/dl')
+print(f'Mức độ cholesterol trung bình của bệnh nhân không mắc bệnh tim: {mean_chol_without_heart_disease:.2f} mg/dl')
+
+
+
+#Chuẩn hóa dữ liệu
 from sklearn.preprocessing import StandardScaler
-import joblib
 
+scaler = StandardScaler()
 
-def download_dataset(dest_path):
-	"""Try a few public raw CSV URLs for the UCI Heart Disease dataset."""
-	urls = [
-		"https://raw.githubusercontent.com/amirziai/heart-disease-prediction/master/heart.csv",
-		"https://raw.githubusercontent.com/ansh941/Machine-Learning-Projects/master/Heart%20Disease%20UCI/heart.csv",
-	]
-	for url in urls:
-		try:
-			df = pd.read_csv(url)
-			df.to_csv(dest_path, index=False)
-			print(f"Downloaded dataset from {url}")
-			return df
-		except Exception:
-			continue
-	raise RuntimeError("Unable to download dataset from known URLs; please provide a local CSV named 'raw_heart.csv'.")
+numeric_features = ['age', 'trestbps', 'chol', 'thalach', 'oldpeak']
+df[numeric_features] = scaler.fit_transform(df[numeric_features])
 
-
-def load_raw(path):
-	if os.path.exists(path):
-		return pd.read_csv(path)
-	# try to download to that path
-	return download_dataset(path)
-
-
-def clean_dataframe(df: pd.DataFrame) -> pd.DataFrame:
-	# Basic canonicalization: drop duplicates
-	df = df.copy()
-	df.drop_duplicates(inplace=True)
-
-	# Common target column names: 'target' or 'HeartDisease' or 'diagnosis'
-	target_cols = [c for c in df.columns if c.lower() in ("target", "heartdisease", "diagnosis")]
-	if not target_cols:
-		# try to detect a column with values 0/1
-		for c in df.columns:
-			if set(df[c].dropna().unique()).issubset({0, 1}):
-				target_cols = [c]
-				break
-	if not target_cols:
-		raise RuntimeError("Could not identify target column (expected 0/1 labels).")
-	target = target_cols[0]
-	df.rename(columns={target: "target"}, inplace=True)
-
-	# Fill missing numeric values with median
-	num_cols = df.select_dtypes(include=[np.number]).columns.tolist()
-	df[num_cols] = df[num_cols].fillna(df[num_cols].median())
-
-	# For categorical non-numeric columns, do one-hot encoding
-	obj_cols = df.select_dtypes(include=[object]).columns.tolist()
-	if obj_cols:
-		df = pd.get_dummies(df, columns=obj_cols, drop_first=True)
-
-	# Ensure target is integer 0/1
-	df["target"] = df["target"].astype(int)
-
-	return df
-
-
-def scale_features(df: pd.DataFrame, scaler_path: str = "scaler.joblib") -> pd.DataFrame:
-	df = df.copy()
-	y = df.pop("target")
-	scaler = StandardScaler()
-	X_scaled = scaler.fit_transform(df)
-	X = pd.DataFrame(X_scaled, columns=df.columns)
-	X["target"] = y.values
-	joblib.dump(scaler, scaler_path)
-	print(f"Saved scaler to {scaler_path}")
-	return X
-
-
-def main():
-	repo_dir = os.path.dirname(__file__)
-	raw_path = os.path.join(repo_dir, "raw_heart.csv")
-	cleaned_path = os.path.join(repo_dir, "cleaned_data.csv")
-	scaler_path = os.path.join(repo_dir, "scaler.joblib")
-
-	df = load_raw(raw_path)
-	print("Loaded raw data with shape:", df.shape)
-	df_clean = clean_dataframe(df)
-	print("Cleaned data shape:", df_clean.shape)
-	df_scaled = scale_features(df_clean, scaler_path=scaler_path)
-	df_scaled.to_csv(cleaned_path, index=False)
-	print(f"Wrote cleaned and scaled data to {cleaned_path}")
-
-
-if __name__ == "__main__":
-	main()
+#Xuất dữ liệu đã chuẩn hóa
+df.to_csv("Clean_Data.csv", index=False)
 
