@@ -1,0 +1,5 @@
+{
+  "best_threshold": 0.37,
+  "validation_accuracy": 0.9861111111111112,
+  "validation_f2": 0.9782608695652174
+}
