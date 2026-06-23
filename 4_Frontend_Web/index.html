@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group 8 - Hệ thống Dự báo Bệnh Tim</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Icon Font -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="background-animation">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <div class="container">
+        <!-- Sidebar / Info Section -->
+        <div class="info-section">
+            <div class="logo">
+                <i class="fa-solid fa-heart-pulse"></i>
+                <h1>GROUP 8</h1>
+            </div>
+            <h2>Hệ thống Trí tuệ Nhân tạo hỗ trợ Y khoa</h2>
+            <p>Vui lòng điền đầy đủ các chỉ số sinh tồn và kết quả lâm sàng của bệnh nhân vào biểu mẫu bên cạnh. Hệ thống AI của chúng tôi sẽ phân tích 13 đặc trưng để đưa ra cảnh báo nguy cơ mắc bệnh tim mạch.</p>
+        </div>
+
+        <!-- Form Section -->
+        <div class="form-section">
+            <form id="prediction-form" class="glass-card">
+                <h3><i class="fa-solid fa-file-medical"></i> Hồ Sơ Bệnh Nhân</h3>
+                
+                <div class="form-group-title">1. Thông tin cá nhân</div>
+                <div class="form-grid">
+                    <div class="input-box">
+                        <label for="age">Tuổi (Age)</label>
+                        <input type="number" id="age" name="age" required placeholder="Ví dụ: 45">
+                    </div>
+                    <div class="input-box">
+                        <label for="sex">Giới tính (Sex)</label>
+                        <select id="sex" name="sex" required>
+                            <option value="" disabled selected>Chọn giới tính</option>
+                            <option value="1">Nam</option>
+                            <option value="0">Nữ</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group-title">2. Chỉ số Sinh tồn & Máu</div>
+                <div class="form-grid">
+                    <div class="input-box">
+                        <label for="trestbps">Huyết áp lúc nghỉ (mmHg)</label>
+                        <input type="number" id="trestbps" name="trestbps" required placeholder="Ví dụ: 120">
+                    </div>
+                    <div class="input-box">
+                        <label for="chol">Cholesterol (mg/dl)</label>
+                        <input type="number" id="chol" name="chol" required placeholder="Ví dụ: 200">
+                    </div>
+                    <div class="input-box">
+                        <label for="fbs">Đường huyết đói > 120 mg/dl?</label>
+                        <select id="fbs" name="fbs" required>
+                            <option value="0">Không (False)</option>
+                            <option value="1">Có (True)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group-title">3. Khám Tim Mạch & Điện Tâm Đồ</div>
+                <div class="form-grid form-grid-2">
+                    <div class="input-box">
+                        <label for="cp">Loại Đau Ngực (CP)</label>
+                        <select id="cp" name="cp" required>
+                            <option value="0">Đau thắt ngực điển hình</option>
+                            <option value="1">Đau không điển hình</option>
+                            <option value="2">Đau không do tim</option>
+                            <option value="3">Không triệu chứng</option>
+                        </select>
+                    </div>
+                    <div class="input-box">
+                        <label for="restecg">Điện Tâm Đồ (RestECG)</label>
+                        <select id="restecg" name="restecg" required>
+                            <option value="0">Bình thường (Normal)</option>
+                            <option value="1">Bất thường sóng ST-T</option>
+                            <option value="2">Phì đại thất trái</option>
+                        </select>
+                    </div>
+                    <div class="input-box">
+                        <label for="thalach">Nhịp Tim Tối Đa (Thalach)</label>
+                        <input type="number" id="thalach" name="thalach" required placeholder="Ví dụ: 150">
+                    </div>
+                    <div class="input-box">
+                        <label for="exang">Đau Ngực Khi Vận Động (Exang)</label>
+                        <select id="exang" name="exang" required>
+                            <option value="0">Không (No)</option>
+                            <option value="1">Có (Yes)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group-title">4. Chỉ số Chuyên Sâu Khác</div>
+                <div class="form-grid form-grid-2">
+                    <div class="input-box">
+                        <label for="oldpeak">Độ chênh ST (Oldpeak)</label>
+                        <input type="number" id="oldpeak" name="oldpeak" step="0.1" required placeholder="Ví dụ: 1.5">
+                    </div>
+                    <div class="input-box">
+                        <label for="slope">Độ dốc đoạn ST (Slope)</label>
+                        <select id="slope" name="slope" required>
+                            <option value="0">Dốc lên (Upsloping)</option>
+                            <option value="1">Ngang (Flat)</option>
+                            <option value="2">Dốc xuống (Downsloping)</option>
+                        </select>
+                    </div>
+                    <div class="input-box">
+                        <label for="ca">Số mạch máu chính (CA: 0-3)</label>
+                        <input type="number" id="ca" name="ca" min="0" max="3" required placeholder="0">
+                    </div>
+                    <div class="input-box">
+                        <label for="thal">Thalassemia (Thal)</label>
+                        <select id="thal" name="thal" required>
+                            <option value="0">Bình thường (Normal)</option>
+                            <option value="1">Khiếm khuyết cố định (Fixed)</option>
+                            <option value="2">Khiếm khuyết có thể phục hồi (Reversable)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" id="submit-btn" class="glow-on-hover">
+                    <i class="fa-solid fa-stethoscope"></i> CHUẨN ĐOÁN BẰNG AI
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Kết quả -->
+    <div id="result-modal" class="modal hidden">
+        <div class="modal-content glass-card">
+            <button id="close-modal" class="close-btn"><i class="fa-solid fa-xmark"></i></button>
+            <div id="modal-icon" class="status-icon">
+                <!-- Icon sẽ được chèn bằng JS -->
+            </div>
+            <h2 id="modal-title">Đang Phân Tích...</h2>
+            <p id="modal-desc">Vui lòng chờ trong giây lát.</p>
+            <div id="probability-bar" class="progress-container hidden">
+                <div class="progress-bar" id="progress-fill"></div>
+            </div>
+            <p id="probability-text" class="hidden">Nguy cơ: 0%</p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
