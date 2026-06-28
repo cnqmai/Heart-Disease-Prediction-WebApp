@@ -1,154 +1,434 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Group 8 - Hệ thống Dự báo Bệnh Tim</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <!-- Icon Font -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!DOCTYPE html><html lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Group 8 Precision - Hồ Sơ Bệnh Nhân</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface": "#0b1c30",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed-variant": "#00468b",
+                        "on-error": "#ffffff",
+                        "surface-bright": "#f8f9ff",
+                        "primary-container": "#0073de",
+                        "primary-fixed-dim": "#a9c7ff",
+                        "surface-dim": "#cbdbf5",
+                        "on-background": "#0b1c30",
+                        "on-tertiary-fixed": "#002113",
+                        "background": "#f8f9ff",
+                        "tertiary-fixed": "#6ffbbe",
+                        "tertiary-container": "#00855b",
+                        "tertiary": "#006947",
+                        "outline-variant": "#c0c6d6",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "surface-container-high": "#dce9ff",
+                        "primary": "#005bb2",
+                        "on-primary-fixed": "#001b3d",
+                        "inverse-surface": "#213145",
+                        "surface-container-highest": "#d3e4fe",
+                        "outline": "#717785",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#4cd6ff",
+                        "error-container": "#ffdad6",
+                        "on-secondary-container": "#005266",
+                        "surface-tint": "#005db6",
+                        "surface-variant": "#d3e4fe",
+                        "secondary-container": "#00ccf9",
+                        "primary-fixed": "#d6e3ff",
+                        "on-tertiary-container": "#f5fff6",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed": "#001f28",
+                        "surface-container-low": "#eff4ff",
+                        "on-tertiary": "#ffffff",
+                        "inverse-primary": "#a9c7ff",
+                        "on-surface-variant": "#404754",
+                        "on-primary-container": "#fefcff",
+                        "on-secondary-fixed-variant": "#004e60",
+                        "surface-container": "#e5eeff",
+                        "secondary-fixed": "#b7eaff",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "on-primary": "#ffffff",
+                        "secondary": "#00677f",
+                        "surface": "#f8f9ff",
+                        "surface-container-lowest": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "section-gap": "40px",
+                        "margin-desktop": "48px",
+                        "margin-mobile": "16px",
+                        "base": "8px",
+                        "container-max": "1200px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Shimmer effect for AI processing */
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        .animate-shimmer {
+            animation: shimmer 2s infinite linear;
+        }
+        
+        /* Pulse effect for AI button */
+        @keyframes ai-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 115, 222, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 115, 222, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 115, 222, 0); }
+        }
+        .ai-btn:hover {
+            animation: ai-pulse 1.5s infinite;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #c0c6d6;
+            border-radius: 10px;
+        }
+
+        /* Sophisticated Medical-Tech Background */
+        .med-tech-bg {
+            background-color: #f8f9ff;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(0, 115, 222, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(78, 222, 163, 0.05) 0%, transparent 40%),
+                linear-gradient(rgba(0, 93, 182, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 93, 182, 0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+        }
+
+        .blueprint-dots {
+            background-image: radial-gradient(rgba(0, 93, 182, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
 </head>
-<body>
-    <div class="background-animation">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-    </div>
+<body class="med-tech-bg text-on-background flex flex-col min-h-screen overflow-x-hidden antialiased">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky bg-surface/80 backdrop-blur-md border-b border-outline-variant/30 z-30 flex justify-between items-center px-gutter h-20 shrink-0">
+<!-- Brand Area -->
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-on-primary shadow-sm">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">monitor_heart</span>
+</div>
+<h1 class="font-headline-md text-headline-md text-primary tracking-tight">Group 8</h1>
+</div>
+<!-- Navigation (Centered) -->
 
-    <div class="container">
-        <!-- Sidebar / Info Section -->
-        <div class="info-section">
-            <div class="logo">
-                <i class="fa-solid fa-heart-pulse"></i>
-                <h1>GROUP 8</h1>
-            </div>
-            <h2>Hệ thống Trí tuệ Nhân tạo hỗ trợ Y khoa</h2>
-            <p>Vui lòng điền đầy đủ các chỉ số sinh tồn và kết quả lâm sàng của bệnh nhân vào biểu mẫu bên cạnh. Hệ thống AI của chúng tôi sẽ phân tích 13 đặc trưng để đưa ra cảnh báo nguy cơ mắc bệnh tim mạch.</p>
-        </div>
+<!-- Actions (Right Aligned) -->
 
-        <!-- Form Section -->
-        <div class="form-section">
-            <form id="prediction-form" class="glass-card">
-                <h3><i class="fa-solid fa-file-medical"></i> Hồ Sơ Bệnh Nhân</h3>
-                
-                <div class="form-group-title">1. Thông tin cá nhân</div>
-                <div class="form-grid">
-                    <div class="input-box">
-                        <label for="age">Tuổi (Age)</label>
-                        <input type="number" id="age" name="age" required placeholder="Ví dụ: 45">
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col w-full max-w-container-max mx-auto px-margin-mobile md:px-gutter py-12 relative z-10">
+<!-- Header Summary -->
+<div class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h2 class="font-display-lg text-display-lg text-on-surface tracking-tight">Hệ thống dự đoán nguy cơ mắc bệnh tim</h2>
+</div>
+<button class="bg-primary hover:bg-on-primary-fixed-variant text-on-primary font-label-md text-label-md px-6 py-3 rounded-full shadow-sm transition-all flex items-center gap-2 w-fit">
+<span class="material-symbols-outlined" style="font-size: 20px;">add</span>
+            Phân Tích Mới
+        </button>
+</div>
+<!-- Main Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
+<!-- Left Column: Smart Upload -->
+<div class="lg:col-span-4 flex flex-col gap-6 sticky top-24">
+<!-- Smart Upload Zone -->
+<div class="bg-white rounded-xl shadow-[0_15px_40px_rgba(0,115,222,0.08)] p-8 border border-primary/10 relative group transition-all duration-300 hover:shadow-[0_20px_50px_rgba(0,115,222,0.12)]">
+<h3 class="font-label-md text-label-md text-primary mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-size: 18px;">auto_awesome</span>
+                    Smart Upload
+                </h3>
+<div class="border-2 border-dashed border-outline-variant group-hover:border-primary/50 rounded-lg p-10 flex flex-col items-center justify-center bg-surface-container-low/30 group-hover:bg-primary/5 transition-colors cursor-pointer text-center relative overflow-hidden h-56">
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors text-[56px] mb-4">cloud_upload</span>
+<p class="font-label-md text-label-md text-on-surface mb-1">Kéo thả tệp báo cáo vào đây</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">PDF, JPG, PNG (ECG, Xét nghiệm máu)</p>
+</div>
+<!-- Processing State -->
+<div class="mt-8">
+<div class="flex justify-between items-center mb-3">
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[16px]">memory</span>
+                            AI đang trích xuất dữ liệu...
+                        </span>
+<span class="font-label-sm text-label-sm text-primary font-bold">68%</span>
+</div>
+<div class="h-2.5 w-full bg-surface-container-high rounded-full overflow-hidden relative">
+<div class="absolute top-0 left-0 h-full w-[68%] bg-primary rounded-full">
+<div class="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/40 to-transparent animate-shimmer"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Patient Form -->
+<div class="lg:col-span-8 flex flex-col">
+<div class="bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.04)] border border-outline-variant/20 flex-1 flex flex-col overflow-hidden">
+<!-- Form Header -->
+<div class="px-10 py-8 border-b border-outline-variant/30 flex justify-between items-center bg-surface-container-lowest">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Hồ Sơ Bệnh Nhân</h2>
+</div>
+<div class="hidden sm:flex px-4 py-1.5 bg-tertiary-container/10 text-tertiary font-label-sm text-label-sm rounded-full items-center gap-2 border border-tertiary/20">
+<span class="material-symbols-outlined" style="font-size: 16px;">verified</span>
+                        Dữ liệu hợp lệ
                     </div>
-                    <div class="input-box">
-                        <label for="sex">Giới tính (Sex)</label>
-                        <select id="sex" name="sex" required>
-                            <option value="" disabled selected>Chọn giới tính</option>
-                            <option value="1">Nam</option>
-                            <option value="0">Nữ</option>
-                        </select>
-                    </div>
-                </div>
+</div>
+<!-- Form Content -->
+<div class="p-10 space-y-12 flex-1">
+<!-- Section 1: Thông tin cá nhân -->
+<section>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-6 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary p-2 bg-primary/5 rounded-lg" style="font-variation-settings: 'FILL' 1;">badge</span>
+                            Thông tin cá nhân
+                        </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div>
+<label class="block mb-2 font-label-md text-label-md text-on-surface-variant">Tuổi (Age)</label>
+<div class="relative">
+<input class="bg-surface-container-low border border-transparent rounded-lg pl-5 pr-12 py-4 text-body-lg font-body-lg text-on-surface focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/20 outline-none w-full transition-all" placeholder="Nhập tuổi" type="number" value="54">
+<div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+<span class="font-label-sm text-label-sm text-outline">năm</span>
+</div>
+</div>
+</div>
+<div>
+<label class="block mb-2 font-label-md text-label-md text-on-surface-variant">Giới tính (Sex)</label>
+<div class="relative">
+<select class="appearance-none bg-none bg-surface-container-low border border-transparent rounded-lg pl-5 pr-12 py-4 text-body-lg font-body-lg text-on-surface focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/20 outline-none w-full transition-all cursor-pointer">
+<option selected="" value="1">Nam</option>
+<option value="0">Nữ</option>
+</select>
+<div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+<span class="material-symbols-outlined text-outline">expand_more</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 2: Chỉ số Sinh tồn & Máu -->
+<section>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-6 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary p-2 bg-primary/5 rounded-lg" style="font-variation-settings: 'FILL' 1;">water_drop</span>
+                            Chỉ số Sinh tồn &amp; Máu
+                        </h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div>
+<label class="block mb-2 font-label-md text-label-md text-on-surface-variant">Huyết áp</label>
+<div class="relative">
+<input class="bg-surface-container-low border border-transparent rounded-lg pl-5 pr-12 py-4 text-body-lg font-body-lg text-on-surface focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/20 outline-none w-full transition-all" placeholder="Trestbps" type="number" value="130">
+<div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+<span class="font-label-sm text-label-sm text-outline">mmHg</span>
+</div>
+</div>
+</div>
+<div>
+<label class="block mb-2 font-label-md text-label-md text-on-surface-variant">Cholesterol</label>
+<div class="relative">
+<input class="bg-surface-container-low border border-transparent rounded-lg pl-5 pr-12 py-4 text-body-lg font-body-lg text-on-surface focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/20 outline-none w-full transition-all" placeholder="Chol" type="number" value="246">
+<div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+<span class="font-label-sm text-label-sm text-outline">mg/dl</span>
+</div>
+</div>
+</div>
+<div>
+<label class="block mb-2 font-label-md text-label-md text-on-surface-variant" title="Đường huyết đói &gt; 120 mg/dl">Đường huyết đói</label>
+<div class="relative">
+<select class="appearance-none bg-none bg-surface-container-low border border-transparent rounded-lg pl-5 pr-12 py-4 text-body-lg font-body-lg text-on-surface focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/20 outline-none w-full transition-all cursor-pointer">
+<option selected="" value="0">False (&lt; 120)</option>
+<option value="1">True (&gt; 120)</option>
+</select>
+<div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+<span class="material-symbols-outlined text-outline">expand_more</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 3: Khám Tim Mạch & Điện Tâm Đồ -->
+<section>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-6 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary p-2 bg-primary/5 rounded-lg" style="font-variation-settings: 'FILL' 1;">ecg</span>
+                            Khám Tim Mạch &amp; Điện Tâm Đồ
+                        </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div>
+<label class="block mb-2 font-label-md text-label-md text-on-surface-variant">Loại Đau Ngực (CP)</label>
+<div class="relative">
+<select class="appearance-none bg-none bg-surface-container-low border border-transparent rounded-lg pl-5 pr-12 py-4 text-body-lg font-body-lg text-on-surface focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/20 outline-none w-full transition-all cursor-pointer">
+<option value="0">0 - Điển hình</option>
+<option value="1">1 - Không điển hình</option>
+<option selected="" value="2">2 - Không do tim</option>
+<option value="3">3 - Không triệu chứng</option>
+</select>
+<div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+<span class="material-symbols-outlined text-outline">expand_more</span>
+</div>
+</div>
+</div>
+<div>
+<label class="block mb-2 font-label-md text-label-md text-on-surface-variant">Điện Tâm Đồ (RestECG)</label>
+<div class="relative">
+<select class="appearance-none bg-none bg-surface-container-low border border-transparent rounded-lg pl-5 pr-12 py-4 text-body-lg font-body-lg text-on-surface focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/20 outline-none w-full transition-all cursor-pointer">
+<option value="0">0 - Bình thường</option>
+<option selected="" value="1">1 - Bất thường sóng ST-T</option>
+<option value="2">2 - Phì đại thất trái</option>
+</select>
+<div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+<span class="material-symbols-outlined text-outline">expand_more</span>
+</div>
+</div>
+</div>
+<div>
+<label class="block mb-2 font-label-md text-label-md text-on-surface-variant">Nhịp Tim Tối Đa (Thalach)</label>
+<div class="relative">
+<input class="bg-surface-container-low border border-transparent rounded-lg pl-5 pr-12 py-4 text-body-lg font-body-lg text-on-surface focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/20 outline-none w-full transition-all" placeholder="Thalach" type="number" value="152">
+<div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+<span class="font-label-sm text-label-sm text-outline">bpm</span>
+</div>
+</div>
+</div>
+<div>
+<label class="block mb-2 font-label-md text-label-md text-on-surface-variant">Đau Ngực khi vận động</label>
+<div class="relative">
+<select class="appearance-none bg-none bg-surface-container-low border border-transparent rounded-lg pl-5 pr-12 py-4 text-body-lg font-body-lg text-on-surface focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/20 outline-none w-full transition-all cursor-pointer">
+<option selected="" value="0">0 - Không</option>
+<option value="1">1 - Có</option>
+</select>
+<div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+<span class="material-symbols-outlined text-outline">expand_more</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 4: Chỉ số Chuyên Sâu Khác -->
+<section>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-6 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary p-2 bg-primary/5 rounded-lg" style="font-variation-settings: 'FILL' 1;">biotech</span>
+                            Chỉ số Chuyên Sâu Khác
+                        </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div>
+<label class="block mb-2 font-label-md text-label-md text-on-surface-variant">Độ chênh ST (Oldpeak)</label>
+<div class="relative">
+<input class="bg-surface-container-low border border-transparent rounded-lg pl-5 pr-12 py-4 text-body-lg font-body-lg text-on-surface focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/20 outline-none w-full transition-all" placeholder="Oldpeak" step="0.1" type="number" value="1.5">
+<div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+<span class="font-label-sm text-label-sm text-outline">mm</span>
+</div>
+</div>
+</div>
+<div>
+<label class="block mb-2 font-label-md text-label-md text-on-surface-variant">Độ dốc đoạn ST (Slope)</label>
+<div class="relative">
+<select class="appearance-none bg-none bg-surface-container-low border border-transparent rounded-lg pl-5 pr-12 py-4 text-body-lg font-body-lg text-on-surface focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/20 outline-none w-full transition-all cursor-pointer">
+<option value="0">0 - Đi lên</option>
+<option selected="" value="1">1 - Đi ngang</option>
+<option value="2">2 - Đi xuống</option>
+</select>
+<div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+<span class="material-symbols-outlined text-outline">expand_more</span>
+</div>
+</div>
+</div>
+<div>
+<label class="block mb-2 font-label-md text-label-md text-on-surface-variant">Số mạch máu chính (CA)</label>
+<div class="relative">
+<select class="appearance-none bg-none bg-surface-container-low border border-transparent rounded-lg pl-5 pr-12 py-4 text-body-lg font-body-lg text-on-surface focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/20 outline-none w-full transition-all cursor-pointer">
+<option selected="" value="0">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+</select>
+<div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+<span class="material-symbols-outlined text-outline">expand_more</span>
+</div>
+</div>
+</div>
+<div>
+<label class="block mb-2 font-label-md text-label-md text-on-surface-variant">Thalassemia (Thal)</label>
+<div class="relative">
+<select class="appearance-none bg-none bg-surface-container-low border border-transparent rounded-lg pl-5 pr-12 py-4 text-body-lg font-body-lg text-on-surface focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/20 outline-none w-full transition-all cursor-pointer">
+<option value="0">0 - Không xác định</option>
+<option value="1">1 - Bình thường</option>
+<option selected="" value="2">2 - Khiếm khuyết cố định</option>
+<option value="3">3 - Khiếm khuyết có thể phục hồi</option>
+</select>
+<div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+<span class="material-symbols-outlined text-outline">expand_more</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Footer / CTA Action -->
+<div class="px-10 py-10 border-t border-outline-variant/30 bg-surface-bright/50 flex justify-end">
+<button class="ai-btn bg-gradient-to-r from-primary to-surface-tint text-on-primary font-headline-md text-headline-md px-12 py-5 rounded-full shadow-xl flex items-center gap-4 transition-all relative overflow-hidden">
+<!-- Shine effect overlay -->
+<div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full hover:animate-[shimmer_1.5s_infinite]"></div>
+                        CHUẨN ĐOÁN BẰNG AI
+                    </button>
+</div>
+</div>
+</div>
+</div>
+</main>
 
-                <div class="form-group-title">2. Chỉ số Sinh tồn & Máu</div>
-                <div class="form-grid">
-                    <div class="input-box">
-                        <label for="trestbps">Huyết áp lúc nghỉ (mmHg)</label>
-                        <input type="number" id="trestbps" name="trestbps" required placeholder="Ví dụ: 120">
-                    </div>
-                    <div class="input-box">
-                        <label for="chol">Cholesterol (mg/dl)</label>
-                        <input type="number" id="chol" name="chol" required placeholder="Ví dụ: 200">
-                    </div>
-                    <div class="input-box">
-                        <label for="fbs">Đường huyết đói > 120 mg/dl?</label>
-                        <select id="fbs" name="fbs" required>
-                            <option value="0">Không (False)</option>
-                            <option value="1">Có (True)</option>
-                        </select>
-                    </div>
-                </div>
 
-                <div class="form-group-title">3. Khám Tim Mạch & Điện Tâm Đồ</div>
-                <div class="form-grid form-grid-2">
-                    <div class="input-box">
-                        <label for="cp">Loại Đau Ngực (CP)</label>
-                        <select id="cp" name="cp" required>
-                            <option value="0">Đau thắt ngực điển hình</option>
-                            <option value="1">Đau không điển hình</option>
-                            <option value="2">Đau không do tim</option>
-                            <option value="3">Không triệu chứng</option>
-                        </select>
-                    </div>
-                    <div class="input-box">
-                        <label for="restecg">Điện Tâm Đồ (RestECG)</label>
-                        <select id="restecg" name="restecg" required>
-                            <option value="0">Bình thường (Normal)</option>
-                            <option value="1">Bất thường sóng ST-T</option>
-                            <option value="2">Phì đại thất trái</option>
-                        </select>
-                    </div>
-                    <div class="input-box">
-                        <label for="thalach">Nhịp Tim Tối Đa (Thalach)</label>
-                        <input type="number" id="thalach" name="thalach" required placeholder="Ví dụ: 150">
-                    </div>
-                    <div class="input-box">
-                        <label for="exang">Đau Ngực Khi Vận Động (Exang)</label>
-                        <select id="exang" name="exang" required>
-                            <option value="0">Không (No)</option>
-                            <option value="1">Có (Yes)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group-title">4. Chỉ số Chuyên Sâu Khác</div>
-                <div class="form-grid form-grid-2">
-                    <div class="input-box">
-                        <label for="oldpeak">Độ chênh ST (Oldpeak)</label>
-                        <input type="number" id="oldpeak" name="oldpeak" step="0.1" required placeholder="Ví dụ: 1.5">
-                    </div>
-                    <div class="input-box">
-                        <label for="slope">Độ dốc đoạn ST (Slope)</label>
-                        <select id="slope" name="slope" required>
-                            <option value="0">Dốc lên (Upsloping)</option>
-                            <option value="1">Ngang (Flat)</option>
-                            <option value="2">Dốc xuống (Downsloping)</option>
-                        </select>
-                    </div>
-                    <div class="input-box">
-                        <label for="ca">Số mạch máu chính (CA: 0-3)</label>
-                        <input type="number" id="ca" name="ca" min="0" max="3" required placeholder="0">
-                    </div>
-                    <div class="input-box">
-                        <label for="thal">Thalassemia (Thal)</label>
-                        <select id="thal" name="thal" required>
-                            <option value="0">Bình thường (Normal)</option>
-                            <option value="1">Khiếm khuyết cố định (Fixed)</option>
-                            <option value="2">Khiếm khuyết có thể phục hồi (Reversable)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <button type="submit" id="submit-btn" class="glow-on-hover">
-                    <i class="fa-solid fa-stethoscope"></i> CHUẨN ĐOÁN BẰNG AI
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Modal Kết quả -->
-    <div id="result-modal" class="modal hidden">
-        <div class="modal-content glass-card">
-            <button id="close-modal" class="close-btn"><i class="fa-solid fa-xmark"></i></button>
-            <div id="modal-icon" class="status-icon">
-                <!-- Icon sẽ được chèn bằng JS -->
-            </div>
-            <h2 id="modal-title">Đang Phân Tích...</h2>
-            <p id="modal-desc">Vui lòng chờ trong giây lát.</p>
-            <div id="probability-bar" class="progress-container hidden">
-                <div class="progress-bar" id="progress-fill"></div>
-            </div>
-            <p id="probability-text" class="hidden">Nguy cơ: 0%</p>
-        </div>
-    </div>
-
-    <script src="app.js"></script>
-</body>
-</html>
+</body></html>
