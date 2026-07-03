@@ -104,7 +104,7 @@ def predict():
         
         # Tạo thông điệp khuyến nghị chi tiết
         if risk == 1:
-            message = f"AI phát hiện nguy cơ mắc bệnh tim mạch cao ({probability_pct:.1f}%). Vui lòng sắp xếp lịch khám chuyên khoa Tim mạch sớm nhất có thể."
+            message = f"AI phát hiện nguy cơ ({probability_pct:.1f}%). Trong y khoa, mức độ trên {best_threshold*100:.0f}% đã được coi là ngưỡng cần phải khám chuyên sâu khẩn cấp."
         else:
             message = f"AI đánh giá chỉ số tim mạch của bạn ở trạng thái an toàn ({probability_pct:.1f}%). Hãy duy trì lối sống lành mạnh và tập luyện đều đặn."
 

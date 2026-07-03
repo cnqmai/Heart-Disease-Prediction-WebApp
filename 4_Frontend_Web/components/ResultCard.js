@@ -33,7 +33,7 @@ class ResultCard extends HTMLElement {
 
         const cardBg = isHighRisk
             ? 'bg-error-container/20 border-error/30 text-on-error-container shadow-[0_20px_50px_rgba(186,26,26,0.08)] animate-[pulse_3s_infinite_ease-in-out]'
-            : 'bg-tertiary-container/10 border-tertiary/20 text-on-tertiary-container shadow-[0_20px_50px_rgba(0,105,71,0.04)]';
+            : 'bg-tertiary-container/10 border-tertiary/20 text-tertiary shadow-[0_20px_50px_rgba(0,105,71,0.04)]';
 
         const badgeBg = isHighRisk ? 'bg-error text-on-error animate-pulse' : 'bg-tertiary text-on-tertiary';
         const titleText = isHighRisk ? 'Cảnh Báo: Nguy Cơ Bệnh Tim Cao' : 'Kết Quả: Hệ Tim Mạch Khỏe Mạnh';
