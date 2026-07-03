@@ -16,7 +16,7 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler, PolynomialFeatu
 warnings.filterwarnings('ignore')
 
 # 1. Đọc dữ liệu sạch
-file_path = 'Clean_Data.csv'
+file_path = 'heart.csv'
 if not os.path.exists(file_path):
     print(f"LỖI: Không tìm thấy '{file_path}'.")
     exit()

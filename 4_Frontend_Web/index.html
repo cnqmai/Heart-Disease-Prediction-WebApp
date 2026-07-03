@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Group 8 Precision - Hồ Sơ Bệnh Nhân</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap"
+        rel="stylesheet">
+    <!-- Material Symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <!-- Main JavaScript App loaded as a module to handle component imports -->
+    <script src="app.js" type="module"></script>
+    <link href="style.css" rel="stylesheet">
+</head>
+
+<body class="med-tech-bg text-on-background flex flex-col min-h-screen overflow-x-hidden antialiased">
+    <!-- TopAppBar Component -->
+    <patient-header></patient-header>
+
+    <!-- Main Content Area -->
+    <main
+        class="flex-1 flex flex-col w-full max-w-container-max mx-auto px-margin-mobile md:px-gutter py-12 relative z-10">
+        <!-- Header Summary -->
+        <div class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div>
+                <h2 class="font-display-lg text-display-lg text-on-surface tracking-tight">Hệ thống dự đoán nguy cơ mắc
+                    bệnh tim</h2>
+            </div>
+            <button id="btnReset"
+                class="bg-primary hover:bg-on-primary-fixed-variant text-on-primary font-label-md text-label-md px-6 py-3 rounded-full shadow-sm transition-all flex items-center gap-2 w-fit">
+                <span class="material-symbols-outlined" style="font-size: 20px;">add</span>
+                Phân Tích Mới
+            </button>
+        </div>
+
+        <!-- Main Grid Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
+            <!-- Right Column: Patient Form & Result -->
+            <div class="lg:col-span-12 flex flex-col">
+                <form id="predictionForm" method="post"
+                    class="bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.04)] border border-outline-variant/20 flex-1 flex flex-col overflow-hidden">
+                    <!-- Form Header -->
+                    <div
+                        class="px-10 py-8 border-b border-outline-variant/30 flex justify-between items-center bg-surface-container-lowest">
+                        <div>
+                            <h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Hồ Sơ Bệnh Nhân
+                            </h2>
+                        </div>
+                        <div
+                            class="hidden sm:flex px-4 py-1.5 bg-tertiary-container/10 text-tertiary font-label-sm text-label-sm rounded-full items-center gap-2 border border-tertiary/20">
+                            <span class="material-symbols-outlined" style="font-size: 16px;">verified</span>
+                            Dữ liệu hợp lệ
+                        </div>
+                    </div>
+
+                    <!-- Form Content: Divided into Web Component Containers -->
+                    <div class="p-10 space-y-12 flex-1">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-12">
+                            <!-- Left Column: Personal Info & Vital Signs -->
+                            <div class="space-y-12">
+                                <personal-info-section></personal-info-section>
+                                <div></div>
+                                <vital-signs-section></vital-signs-section>
+                            </div>
+                            <!-- Right Column: ECG & Advanced Medical Indicators -->
+                            <div class="space-y-12">
+                                <cardio-exam-section></cardio-exam-section>
+                                <div></div>
+                                <advanced-metrics-section></advanced-metrics-section>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer / CTA Action -->
+                    <div class="px-10 py-10 border-t border-outline-variant/30 bg-surface-bright/50 flex justify-end">
+                        <button type="submit"
+                            class="ai-btn bg-gradient-to-r from-primary to-surface-tint text-on-primary font-headline-md text-headline-md px-12 py-5 rounded-full shadow-xl flex items-center gap-4 transition-all relative overflow-hidden">
+                            <!-- Shine effect overlay -->
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full hover:animate-[shimmer_1.5s_infinite]">
+                            </div>
+                            CHẨN ĐOÁN BẰNG AI
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Result Card Component (Dynamic output) -->
+                <result-card id="predictionResult"></result-card>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>
