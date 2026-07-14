@@ -2,15 +2,17 @@ import os
 import joblib
 import json
 import pandas as pd
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
-
-app = Flask(__name__)
-# CORS(app) - Kích hoạt CORS cho ứng dụng để trình duyệt không chặn request từ Frontend
-CORS(app)
 
 # Xác định đường dẫn tuyệt đối tới các tệp model và threshold
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+FRONTEND_DIR = os.path.abspath(os.path.join(BASE_DIR, '..', '3_Frontend_Web'))
+
+app = Flask(__name__, static_folder=FRONTEND_DIR, static_url_path='')
+# CORS(app) - Kích hoạt CORS cho ứng dụng để trình duyệt không chặn request từ Frontend
+CORS(app)
+
 MODEL_PATH = os.path.join(BASE_DIR, '..', '1_Machine_Learning', 'heart_disease_logistic_regression_model.pkl')
 THRESHOLD_PATH = os.path.join(BASE_DIR, '..', '1_Machine_Learning', 'threshold.json')
 
@@ -37,8 +39,8 @@ if os.path.exists(THRESHOLD_PATH):
         print(f"-> Lỗi khi tải threshold: {e}")
 
 
-@app.route('/')
-def home():
+@app.route('/api/health')
+def health():
     return jsonify({
         "status": "online",
         "message": "Flask Heart Disease Prediction API"
@@ -119,6 +121,20 @@ def predict():
         return jsonify({
             'error': f'Lỗi hệ thống khi dự đoán: {str(e)}'
         }), 500
+
+
+@app.route('/')
+def serve_frontend():
+    return send_from_directory(FRONTEND_DIR, 'index.html')
+
+
+@app.route('/<path:path>')
+def serve_static_or_frontend(path):
+    requested_path = os.path.join(FRONTEND_DIR, path)
+    if os.path.exists(requested_path) and os.path.isfile(requested_path):
+        return send_from_directory(FRONTEND_DIR, path)
+
+    return send_from_directory(FRONTEND_DIR, 'index.html')
 
 
 if __name__ == '__main__':

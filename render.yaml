@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: heart-disease-prediction
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHONUNBUFFERED
+        value: "1"

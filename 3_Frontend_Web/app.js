@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
             try {
-                const apiUrl = 'http://localhost:5000/api/predict';
+                const apiUrl = getPredictionApiUrl();
 
                 const response = await fetch(apiUrl, {
                     method: 'POST',
@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     resultCard.showResult(data);
                 }
             } catch (error) {
-                console.warn('Không kết nối được tới Flask API. Đang giả lập kết quả chẩn đoán...', error);
+                console.warn('Không kết nối được tới Flask API.', error);
             } finally {
                 // Đảm bảo nút được phục hồi trạng thái bất kể thành công hay thất bại
                 submitBtn.disabled = false;
@@ -192,3 +192,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+function getPredictionApiUrl() {
+    const isLocalFrontend = ['localhost', '127.0.0.1'].includes(window.location.hostname)
+        && window.location.port === '8080';
+
+    return isLocalFrontend ? 'http://localhost:5000/api/predict' : '/api/predict';
+}
