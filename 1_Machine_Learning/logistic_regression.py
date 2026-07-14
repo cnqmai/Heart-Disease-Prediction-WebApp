@@ -124,7 +124,7 @@ y_pred_optimized = (y_prob >= best_threshold).astype(int)
 test_accuracy_default = (y_pred_default == y_test).mean()
 test_accuracy_optimized = (y_pred_optimized == y_test).mean()
 
-cv_scores = cross_val_score(best_model, X, y, cv=5, scoring='accuracy', n_jobs=-1)
+cv_scores = cross_val_score(best_model, X_train, y_train, cv=5, scoring='accuracy', n_jobs=-1)
 
 print(f"\n--- KẾT QUẢ ĐÁNH GIÁ MÔ HÌNH ---")
 print(f"ĐỘ CHÍNH XÁC TRAIN: {train_accuracy * 100:.2f}%")
