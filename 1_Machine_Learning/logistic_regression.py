@@ -23,6 +23,10 @@ if not os.path.exists(file_path):
 
 df = pd.read_csv(file_path)
 
+df = df.dropna()  # Loại bỏ các hàng có giá trị thiếu
+df = df.drop_duplicates()  # Loại bỏ các hàng trùng lặp
+
+
 # 2. KIỂM TRA ĐA CỘNG TUYẾN
 plt.figure(figsize=(12, 10))
 sns.heatmap(df.corr(), annot=True, cmap='coolwarm', fmt=".2f")
@@ -35,16 +39,28 @@ X = df.drop('target', axis=1)
 y = df['target']
 
 # Tách cột số và phân loại
-categorical_cols = ['cp', 'restecg', 'slope', 'ca', 'thal']
-numeric_cols = [col for col in X.columns if col not in categorical_cols]
+categorical_cols = ['cp', 'restecg', 'slope', 'ca', 'thal', 'sex', 'fbs', 'exang']
+numeric_cols = ['age', 'trestbps', 'chol', 'thalach', 'oldpeak']
+
 
 # 4. Bổ sung StandardScaler cho dữ liệu số
 preprocessor = ColumnTransformer(
     transformers=[
         ('num', StandardScaler(), numeric_cols),
-        ('cat', OneHotEncoder(handle_unknown='ignore'), categorical_cols),
+        ('cat', OneHotEncoder(handle_unknown='ignore', sparse_output=False), categorical_cols)
     ]
 )
+
+# 4.1 Áp dụng ColumnTransformer để xuất file Clean_Data.csv đã được transform
+X_transformed = preprocessor.fit_transform(X)
+cat_feature_names = preprocessor.named_transformers_['cat'].get_feature_names_out(categorical_cols)
+all_cols = numeric_cols + list(cat_feature_names) 
+
+df_clean = pd.DataFrame(X_transformed, columns=all_cols, index=X.index)
+df_clean['target'] = y
+
+df_clean.to_csv("Clean_Data.csv", index=False)
+print("-> Đã lưu dữ liệu sau khi Scale & One-hot encoding vào 'Clean_Data.csv'.")
 
 # 5. Chia tập dữ liệu
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42, stratify=y)
