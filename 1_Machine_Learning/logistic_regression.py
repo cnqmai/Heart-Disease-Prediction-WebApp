@@ -80,7 +80,7 @@ param_grid = {
     'poly__degree': [1, 2],
     'model__C': [0.01, 0.1, 1, 10, 100],
     'model__solver': ['liblinear', 'lbfgs'],
-    'model__class_weight': [None, 'balanced', {0: 1, 1: 1.5}]
+    'model__class_weight': [None, 'balanced', {0: 1, 1: 1.5}, {0: 1, 1: 3}, {0: 1, 1: 5}]
 }
 
 f2_scorer = make_scorer(fbeta_score, beta=2)
@@ -111,8 +111,8 @@ for threshold in threshold_grid:
     val_pred = (val_prob >= threshold).astype(int)
     current_f2 = fbeta_score(y_val, val_pred, beta=2)
     current_accuracy = (val_pred == y_val).mean()
-    if current_accuracy > best_val_accuracy or (
-        current_accuracy == best_val_accuracy and current_f2 > best_f2
+    if current_f2 > best_f2 or (
+        current_f2 == best_f2 and current_accuracy > best_val_accuracy
     ):
         best_val_accuracy = current_accuracy
         best_f2 = current_f2
